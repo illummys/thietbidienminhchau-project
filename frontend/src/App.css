@@ -1,0 +1,96 @@
+#root {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+.app {
+  width: 100%;
+  min-width: 100vw;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+/* Thêm padding-top cho content để tránh bị che bởi header */
+.app > *:not(.header) {
+  padding-top: 80px; /* Chiều cao của header + menu trên desktop */
+}
+
+@media (max-width: 992px) {
+  .app > *:not(.header) {
+    padding-top: 60px; /* Chiều cao của header trên mobile */
+  }
+}
+
+@media (max-width: 576px) {
+  .app > *:not(.header) {
+    padding-top: 50px; /* Chiều cao của header trên màn hình nhỏ */
+  }
+}
+
+/* Customize scrollbar for Webkit browsers (Chrome, Safari, newer Edge) */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #3a8d23;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #2d6a1b;
+}
+
+/* Customize scrollbar for Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #3a8d23 #f1f1f1;
+}

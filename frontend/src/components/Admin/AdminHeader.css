@@ -1,0 +1,92 @@
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 24px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  height: 64px;
+}
+
+.admin-header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.collapse-button {
+  font-size: 18px;
+  padding: 0 12px;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.collapse-button:hover {
+  color: #3a8d23;
+}
+
+.admin-menu {
+  border: none;
+  background: transparent;
+}
+
+.admin-menu .ant-menu-item {
+  padding: 0 16px;
+  margin: 0 4px;
+}
+
+.admin-menu .ant-menu-item:hover {
+  color: #3a8d23;
+}
+
+.admin-menu .ant-menu-item-selected {
+  color: #3a8d23;
+  background: rgba(58, 141, 35, 0.1);
+}
+
+.admin-header-right {
+  display: flex;
+  align-items: center;
+}
+
+.user-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px;
+  height: 40px;
+  border-radius: 20px;
+  transition: all 0.3s;
+}
+
+.user-button:hover {
+  background: rgba(58, 141, 35, 0.1);
+}
+
+.user-name {
+  font-size: 14px;
+  color: #333;
+}
+
+@media (max-width: 768px) {
+  .admin-header {
+    padding: 0 12px;
+  }
+
+  .admin-menu {
+    display: none;
+  }
+
+  .user-name {
+    display: none;
+  }
+
+  .user-button {
+    padding: 4px;
+  }
+} 

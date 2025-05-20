@@ -1,0 +1,50 @@
+.fixed-contact-buttons {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Khoảng cách giữa các nút */
+}
+
+.contact-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%; /* Hình tròn */
+  color: #ffffff;
+  font-size: 1.5rem;
+  text-decoration: none;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.contact-button.zalo {
+  background-color: #00a8e4; /* Màu xanh Zalo */
+}
+
+.contact-button.phone {
+  background-color: #3a8d23; /* Màu xanh lá cây chủ đề */
+}
+
+.contact-button:hover {
+  transform: scale(1.1); /* Phóng to nhẹ khi hover */
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .fixed-contact-buttons {
+    bottom: 15px;
+    left: 15px;
+    gap: 10px;
+  }
+  .contact-button {
+    width: 40px;
+    height: 40px;
+    font-size: 1.3rem;
+  }
+} 
