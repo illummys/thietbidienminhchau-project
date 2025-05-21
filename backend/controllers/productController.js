@@ -1,13 +1,33 @@
 const { Product, Category, Brand } = require('../models');
+const { Op } = require('sequelize');
 
 // GET /api/products
 exports.getAll = async (req, res, next) => {
   try {
-    const products = await Product.findAll({
-      include: [Category, Brand]
+    const {
+      category: categoryParam,
+      category_id,
+      limit = 10,
+      offset = 0,
+      search
+    } = req.query;
+
+    const catId = category_id || categoryParam;
+    const where = {};
+    if (catId) where.category_id = catId;
+    if (search) where.name = { [Op.substring]: search };
+
+    const result = await Product.findAndCountAll({
+      where,
+      include: [Category, Brand],
+      limit: parseInt(limit),
+      offset: parseInt(offset),
+      order: [['created_at', 'DESC']]
     });
-    res.json(products);
-  } catch (err) { next(err); }
+    res.json(result);
+  } catch (err) {
+    next(err);
+  }
 };
 
 // GET /api/products/:id

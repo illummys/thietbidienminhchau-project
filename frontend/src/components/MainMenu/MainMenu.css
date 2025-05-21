@@ -1,0 +1,126 @@
+.main-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  z-index: 1000;
+}
+
+.menu-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  height: 80px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.menu-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.logo {
+  height: 50px;
+  display: flex;
+  align-items: center;
+}
+
+.logo img {
+  height: 100%;
+  object-fit: contain;
+}
+
+.menu-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.menu-items {
+  border: none;
+  background: transparent;
+}
+
+.menu-items .ant-menu-item {
+  margin: 0 10px;
+  padding: 0 10px;
+}
+
+.menu-items .ant-menu-item::after {
+  display: none;
+}
+
+.menu-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.menu-actions .ant-btn {
+  padding: 8px;
+  height: 40px;
+  width: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.menu-actions .ant-btn:hover {
+  background: #f5f5f5;
+}
+
+.catalog-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 20px;
+  background: #3a8d23;
+  border: none;
+}
+
+.catalog-button:hover {
+  background: #2d6d1a;
+}
+
+@media (max-width: 768px) {
+  .menu-container {
+    height: 60px;
+    padding: 0 15px;
+  }
+
+  .logo {
+    height: 40px;
+  }
+
+  .menu-items {
+    display: none;
+  }
+
+  .menu-actions .ant-btn {
+    padding: 4px;
+    height: 36px;
+    width: 36px;
+  }
+
+  .catalog-button {
+    height: 36px;
+    padding: 0 15px;
+  }
+
+  /* Tắt hiệu ứng hover border đen của iconMenu trong mobile */
+  .menu-actions .ant-btn:hover,
+  .menu-actions .ant-btn:focus,
+  .menu-actions .ant-btn:active {
+    border-color: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .menu-actions .ant-btn::after {
+    display: none !important;
+  }
+} 

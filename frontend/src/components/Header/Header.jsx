@@ -55,21 +55,9 @@ const Header = () => {
       icon: <AppstoreOutlined />,
       label: 'Catalog',
       children: [
-        {
-          key: 'p1',
-          label: 'DÂY CÁP ĐIỆN',
-          path: '/catalog'
-        },
-        {
-          key: 'p2',
-          label: 'THIẾT BỊ ĐÓNG CẮT CÔNG NGHIỆP',
-          path: '/catalog'
-        },
-        {
-          key: 'p3',
-          label: 'ĐIỆN DÂN DỤNG VÀ CHIẾU SÁNG',
-          path: '/catalog'
-        }
+        { key: 'p1', label: 'DÂY CÁP ĐIỆN', path: '/products?category_id=1' },
+        { key: 'p2', label: 'THIẾT BỊ ĐÓNG CẮT CÔNG NGHIỆP', path: '/products?category_id=2' },
+        { key: 'p3', label: 'ĐIỆN DÂN DỤNG VÀ CHIẾU SÁNG', path: '/products?category_id=3' },
       ]
     },
     {
@@ -116,16 +104,37 @@ const Header = () => {
     }
   ];
 
-  const handleMenuClick = ({ key }) => {
-    const menuItem = menuItems.find(item => item.key === key);
-    if (menuItem && menuItem.path) {
-      navigate(menuItem.path);
+  // Trong Header.jsx, thay đổi handleMenuClick như sau:
+
+const handleMenuClick = ({ key }) => {
+    // Tìm item hoặc child có key bằng key được click
+    let pathTo = null;
+
+    for (let item of menuItems) {
+      if (item.key === key && item.path) {
+        pathTo = item.path;
+        break;
+      }
+      if (item.children) {
+        const child = item.children.find(c => c.key === key);
+        if (child) {
+          pathTo = child.path;
+          break;
+        }
+      }
+    }
+
+    if (pathTo) {
+      // Nếu muốn filter theo category_id, đảm bảo path dùng ?category_id=…
+      navigate(pathTo);
+      // Đóng mobile menu/search nếu cần
       if (window.innerWidth <= 992) {
         setIsMobileMenuOpen(false);
         setIsMobileSearchVisible(false);
       }
     }
   };
+
 
   const handleMenuToggle = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);

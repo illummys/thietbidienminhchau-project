@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Row, Col, Input, Spin, message, Pagination } from 'antd';
-import { useNavigate } from 'react-router-dom';
+import { Card, Row, Col, Input, Spin, message, Pagination, Button } from 'antd';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { getProducts } from '../../api/api';
 import './ProductsPage.css';
 
@@ -11,6 +11,8 @@ const ProductsPage = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading]   = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const [pagination, setPagination] = useState({
     current: 1,
     pageSize: 10,
@@ -18,23 +20,42 @@ const ProductsPage = () => {
   });
   const navigate = useNavigate();
 
+  // Danh sách giả lập các category (bạn có thể fetch từ API)
+  const categories = [
+    { id: 1, name: 'Dây cáp điện' },
+    { id: 2, name: 'Thiết bị công nghiệp' },
+    { id: 3, name: 'Điện dân dụng & chiếu sáng' }
+  ];
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  // Khi pagination hoặc searchParams thay đổi → fetch lại
   useEffect(() => {
     fetchProducts();
-  }, [pagination.current, pagination.pageSize]);
+  }, [pagination.current, pagination.pageSize, searchParams]);
 
   const fetchProducts = async () => {
     setLoading(true);
     try {
-      // Gọi API lấy products với params
-      const result = await getProducts({
-        page: pagination.current,
+      const categoryId = searchParams.get('category_id');
+      const params = {
         limit: pagination.pageSize,
-        search: searchTerm
-      });
-      // API trả về { rows: [...], count: N }
-      const { rows, count } = result;
-      setProducts(rows);
-      setPagination(prev => ({ ...prev, total: count }));
+        offset: (pagination.current - 1) * pagination.pageSize,
+      };
+      if (categoryId) {
+        params.category_id = categoryId;
+      }
+
+      const result = await getProducts(params);
+      const items = Array.isArray(result) ? result : result.rows || [];
+
+      setProducts(items);
+      setPagination(prev => ({
+        ...prev,
+        total: result.count || items.length
+      }));
     } catch (error) {
       console.error('Error fetching products:', error);
       message.error('Không thể tải danh sách sản phẩm');
@@ -43,10 +64,14 @@ const ProductsPage = () => {
     }
   };
 
+  // Khi user bấm nút tìm kiếm
   const handleSearch = (value) => {
     setSearchTerm(value);
-    setPagination(prev => ({ ...prev, current: 1 }));
-    // fetchProducts sẽ tự chạy do searchTerm change
+    const filtered = products.filter(p =>
+      p.name.toLowerCase().includes(value.toLowerCase())
+    );
+    setProducts(filtered);
+    setPagination(prev => ({ ...prev, total: filtered.length, current: 1 }));
   };
 
   const handlePageChange = (page, pageSize) => {
@@ -57,8 +82,18 @@ const ProductsPage = () => {
     }));
   };
 
-  const handleCardClick = (id) => {
-    navigate(`/products/${id}`);
+  const handleCardClick = (product) => {
+    navigate(`/product/${product.id}`);
+  };
+
+  // Khi bấm nút category, cập nhật query param ?category=
+  const handleCategoryFilter = (catId) => {
+    setPagination(prev => ({ ...prev, current: 1 }));
+    if (catId) {
+      setSearchParams({ category_id: catId });
+    } else {
+      setSearchParams({}); // xóa filter
+    }
   };
 
   return (
@@ -73,6 +108,27 @@ const ProductsPage = () => {
           onSearch={handleSearch}
           style={{ width: 300 }}
         />
+      </div>
+
+      {/* Nút lọc theo category */}
+      <div className="category-filters" style={{ margin: '16px 0' }}>
+        <Button
+          type={!searchParams.get('category') ? 'primary' : 'default'}
+          onClick={() => handleCategoryFilter(null)}
+          style={{ marginRight: 8 }}
+        >
+          Tất cả
+        </Button>
+        {categories.map(cat => (
+          <Button
+            key={cat.id}
+            type={String(cat.id) === searchParams.get('category') ? 'primary' : 'default'}
+            onClick={() => handleCategoryFilter(cat.id)}
+            style={{ marginRight: 8 }}
+          >
+            {cat.name}
+          </Button>
+        ))}
       </div>
 
       {loading ? (
@@ -93,7 +149,7 @@ const ProductsPage = () => {
                       style={{ height: 200, objectFit: 'cover' }}
                     />
                   }
-                  onClick={() => handleCardClick(product.id)}
+                  onClick={() => handleCardClick(product)}
                 >
                   <Meta
                     title={product.name}

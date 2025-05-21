@@ -57,7 +57,7 @@
 }
 
 .social-links a:hover {
-  color: #e2e8f0;
+  color: #e2e8f0 !important;
 }
 
 .address {
@@ -338,6 +338,15 @@
 
   .mobile-menu-toggle {
     display: block;
+    border: none;       /* Xoá border mặc định */
+    background: none;   /* Nếu button có background */
+    outline: none; 
+  }
+
+  .mobile-menu-toggle:focus,
+  .mobile-menu-toggle:active {
+    outline: none !important;
+    box-shadow: none !important;
   }
 
   .header-right {

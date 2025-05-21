@@ -29,63 +29,63 @@ export const loginAdmin = async ({ username, password }) => {
 
 // === CATEGORIES ===
 export const getCategories = () =>
-  api.get('/categories').then(res => res.data);
+  api.get('/category').then(res => res.data);
 
 export const getCategory = id =>
-  api.get(`/categories/${id}`).then(res => res.data);
+  api.get(`/category/${id}`).then(res => res.data);
 
 export const createCategory = payload =>
-  api.post('/categories', payload).then(res => res.data);
+  api.post('/category', payload).then(res => res.data);
 
 export const updateCategory = (id, payload) =>
-  api.put(`/categories/${id}`, payload).then(res => res.data);
+  api.put(`/category/${id}`, payload).then(res => res.data);
 
 export const deleteCategory = id =>
-  api.delete(`/categories/${id}`).then(res => res.data);
+  api.delete(`/category/${id}`).then(res => res.data);
 
 // === BRANDS ===
 export const getBrands = () =>
-  api.get('/brands').then(res => res.data);
+  api.get('/brand').then(res => res.data);
 
 export const getBrand = id =>
-  api.get(`/brands/${id}`).then(res => res.data);
+  api.get(`/brand/${id}`).then(res => res.data);
 
 export const createBrand = payload =>
-  api.post('/brands', payload).then(res => res.data);
+  api.post('/brand', payload).then(res => res.data);
 
 export const updateBrand = (id, payload) =>
-  api.put(`/brands/${id}`, payload).then(res => res.data);
+  api.put(`/brand/${id}`, payload).then(res => res.data);
 
 export const deleteBrand = id =>
-  api.delete(`/brands/${id}`).then(res => res.data);
+  api.delete(`/brand/${id}`).then(res => res.data);
 
 // === PRODUCTS ===
 export const getProducts = (params = {}) =>
-  api.get('/products', { params }).then(res => res.data);
+  api.get('/product', { params }).then(res => res.data);
 
 export const getProduct = id =>
-  api.get(`/products/${id}`).then(res => res.data);
+  api.get(`/product/${id}`).then(res => res.data);
 
 export const createProduct = payload =>
-  api.post('/products', payload).then(res => res.data);
+  api.post('/product', payload).then(res => res.data);
 
 export const updateProduct = (id, payload) =>
-  api.put(`/products/${id}`, payload).then(res => res.data);
+  api.put(`/product/${id}`, payload).then(res => res.data);
 
 export const deleteProduct = id =>
-  api.delete(`/products/${id}`).then(res => res.data);
+  api.delete(`/product/${id}`).then(res => res.data);
 
 // === ORDERS ===
 // Khách (no auth)
 export const createOrder = payload =>
-  api.post('/orders', payload).then(res => res.data);
+  api.post('/order', payload).then(res => res.data);
 
 // Admin
 export const getOrders = () =>
-  api.get('/orders').then(res => res.data);
+  api.get('/order').then(res => res.data);
 
 export const getOrder = id =>
-  api.get(`/orders/${id}`).then(res => res.data);
+  api.get(`/order/${id}`).then(res => res.data);
 
 // === UTILS ===
 export const logout = () => {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { Layout } from 'antd';
 import './App.css';
@@ -60,7 +60,7 @@ function App() {
             </>
           }/>
 
-          <Route path="/products/:productId" element={
+          <Route path="/product/:productId" element={
             <>
               <Header />
               <ProductDetailPage />

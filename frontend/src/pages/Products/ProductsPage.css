@@ -1,7 +1,7 @@
 .products-page {
   padding: 24px;
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 200px auto;
   min-height: calc(100vh - 300px);
   display: flex;
   flex-direction: column;
@@ -31,6 +31,7 @@
   height: 100%;
   display: flex;
   flex-direction: column;
+  cursor: pointer;
 }
 
 .ant-card-cover {
@@ -42,6 +43,11 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.ant-card:hover .ant-card-cover img {
+  transform: scale(1.05);
 }
 
 .ant-card-meta-title {

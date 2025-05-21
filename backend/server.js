@@ -9,10 +9,10 @@ app.use(cors());
 app.use(express.json());
 
 // Mount routes
-app.use('/api/product',   require('./routes/product'));
+app.use('/api/product', require('./routes/product'));
 app.use('/api/category', require('./routes/category'));
-app.use('/api/brand',     require('./routes/brand'));
-app.use('/api/order',     require('./routes/order'));
+app.use('/api/brand', require('./routes/brand'));
+app.use('/api/order', require('./routes/order'));
 
 // Error handler
 app.use(errorHandler);

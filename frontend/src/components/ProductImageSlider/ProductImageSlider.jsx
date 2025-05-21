@@ -1,17 +1,19 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { LeftOutlined, RightOutlined } from '@ant-design/icons';
-import { Spin, message } from 'antd';
+import { LeftOutlined, RightOutlined, ShoppingCartOutlined, EyeOutlined, TagOutlined } from '@ant-design/icons';
+import { Spin, message, Button, Tag } from 'antd';
 import { getProducts } from '../../api/api';
+import { Link, useNavigate } from 'react-router-dom';
 import './ProductImageSlider.css';
 
 const ProductImageSlider = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [products, setProducts]     = useState([]);
-  const [loading, setLoading]       = useState(true);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
   const sliderRef = useRef(null);
-  const itemRef   = useRef(null);
-  const [itemWidth, setItemWidth]   = useState(0);
-  const itemsToShow = 5; // Number of items visible at once
+  const itemRef = useRef(null);
+  const [itemWidth, setItemWidth] = useState(0);
+  const itemsToShow = 4; // Số sản phẩm hiển thị cùng lúc
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchFeaturedProducts();
@@ -22,9 +24,9 @@ const ProductImageSlider = () => {
       const width = itemRef.current.offsetWidth;
       const style = getComputedStyle(itemRef.current);
       const marginRight = parseFloat(style.marginRight);
-      const marginLeft  = parseFloat(style.marginLeft);
+      const marginLeft = parseFloat(style.marginLeft);
       const paddingLeft = parseFloat(style.paddingLeft);
-      const paddingRight= parseFloat(style.paddingRight);
+      const paddingRight = parseFloat(style.paddingRight);
       setItemWidth(width + marginLeft + marginRight + paddingLeft + paddingRight);
     }
   }, [products]);
@@ -32,7 +34,6 @@ const ProductImageSlider = () => {
   const fetchFeaturedProducts = async () => {
     try {
       setLoading(true);
-      // Lấy sản phẩm nổi bật: API wrapper getProducts trả về trực tiếp mảng
       const items = await getProducts({ featured: true });
       setProducts(items);
     } catch (error) {
@@ -41,6 +42,14 @@ const ProductImageSlider = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleAddToCart = (product) => {
+    message.success(`Đã thêm ${product.name} vào giỏ hàng`);
+  };
+
+  const handleProductClick = (productId) => {
+    navigate(`/product/${productId}`);
   };
 
   const next = () => {
@@ -79,13 +88,28 @@ const ProductImageSlider = () => {
 
   return (
     <div className="product-slider-container">
-      <button
-        className="slider-nav-button prev"
-        onClick={previous}
-        disabled={currentIndex === 0}
-      >
-        <LeftOutlined />
-      </button>
+      <div className="slider-header">
+        <div className="slider-title">
+          <h2>Sản phẩm nổi bật</h2>
+          <p className="slider-subtitle">Khám phá các sản phẩm được yêu thích nhất</p>
+        </div>
+        <div className="slider-controls">
+          <button
+            className="slider-nav-button prev"
+            onClick={previous}
+            disabled={currentIndex === 0}
+          >
+            <LeftOutlined />
+          </button>
+          <button
+            className="slider-nav-button next"
+            onClick={next}
+            disabled={currentIndex >= products.length - itemsToShow}
+          >
+            <RightOutlined />
+          </button>
+        </div>
+      </div>
 
       <div className="product-slider" ref={sliderRef}>
         <div className="product-slider-track">
@@ -95,27 +119,59 @@ const ProductImageSlider = () => {
               className="product-slider-item"
               ref={itemRef}
             >
-              <img
-                src={product.image_url}
-                alt={product.name}
-                className="product-slider-image"
-              />
-              <div className="product-slider-info">
-                <h3>{product.name}</h3>
-                <p>{product.price.toLocaleString('vi-VN')} VNĐ</p>
+              <div className="product-card">
+                <div 
+                  className="product-image-container"
+                  onClick={() => handleProductClick(product.id)}
+                >
+                  <img
+                    src={product.image_url}
+                    alt={product.name}
+                    className="product-slider-image"
+                  />
+                  {product.best_seller && (
+                    <Tag color="red" className="best-seller-tag">
+                      <TagOutlined /> Bán chạy
+                    </Tag>
+                  )}
+                  <div className="product-overlay">
+                    <div className="product-actions">
+                      <Link to={`/product/${product.id}`}>
+                        <Button 
+                          type="primary" 
+                          icon={<EyeOutlined />}
+                          className="view-details-btn"
+                        >
+                          Xem chi tiết
+                        </Button>
+                      </Link>
+                      <Button 
+                        type="primary" 
+                        icon={<ShoppingCartOutlined />}
+                        className="add-to-cart-btn"
+                        onClick={() => handleAddToCart(product)}
+                      >
+                        Thêm vào giỏ
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+                <div className="product-info">
+                  <Link to={`/product/${product.id}`} className="product-name">
+                    {product.name}
+                  </Link>
+                  <div className="product-price">
+                    {product.price.toLocaleString('vi-VN')} VNĐ
+                  </div>
+                  <div className="product-category">
+                    <Tag color="blue">{product.category_name}</Tag>
+                  </div>
+                </div>
               </div>
             </div>
           ))}
         </div>
       </div>
-
-      <button
-        className="slider-nav-button next"
-        onClick={next}
-        disabled={currentIndex >= products.length - itemsToShow}
-      >
-        <RightOutlined />
-      </button>
     </div>
   );
 };

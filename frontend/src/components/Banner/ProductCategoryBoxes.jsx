@@ -29,7 +29,11 @@ const ProductCategoryBoxes = () => {
       });
 
       const results = await Promise.all(promises);
-      setData(results);
+      // Lọc ra các category có sản phẩm
+      const categoriesWithProducts = results.filter(item => 
+        item.products && item.products.length > 0
+      );
+      setData(categoriesWithProducts);
 
     } catch (err) {
       console.error('Error loading categories or products:', err);
@@ -41,6 +45,11 @@ const ProductCategoryBoxes = () => {
 
   const handleCategoryClick = (categoryId) => {
     navigate(`/products?category=${categoryId}`);
+  };
+
+  const handleProductClick = (productId, e) => {
+    e.stopPropagation(); // Ngăn chặn sự kiện click lan ra category
+    navigate(`/product/${productId}`);
   };
 
   if (loading) {
@@ -55,25 +64,25 @@ const ProductCategoryBoxes = () => {
     <div className="category-boxes">
       {data.map(({ category, products }) => (
         <div 
-          className="category-box" 
-          key={category.id}
+          key={category.id} 
+          className="category-box"
           onClick={() => handleCategoryClick(category.id)}
         >
-          <div className="category-title">{category.name}</div>
+          <h2 className="category-title">{category.name}</h2>
           <div className="category-items">
             {products.map((product) => (
-              <div className="category-item" key={product.id}>
+              <div 
+                key={product.id} 
+                className="category-item"
+                onClick={(e) => handleProductClick(product.id, e)}
+              >
                 <img 
                   src={product.image_url} 
-                  alt={product.name} 
-                  className="category-item-image" 
+                  alt={product.name}
+                  className="category-item-image"
                 />
                 <div className="category-item-name">{product.name}</div>
               </div>
-            ))}
-            {/* Nếu muốn hiển thị placeholder khi ít hơn 4 */}
-            {[...Array(4 - products.length)].map((_, i) => (
-              <div className="category-item placeholder" key={`ph-${i}`} />
             ))}
           </div>
         </div>
