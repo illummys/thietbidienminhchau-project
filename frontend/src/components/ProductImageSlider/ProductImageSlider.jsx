@@ -10,9 +10,8 @@ const ProductImageSlider = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const sliderRef = useRef(null);
-  const itemRef = useRef(null);
   const [itemWidth, setItemWidth] = useState(0);
-  const itemsToShow = 4; // Số sản phẩm hiển thị cùng lúc
+  const itemsToShow = 4;
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -20,9 +19,10 @@ const ProductImageSlider = () => {
   }, []);
 
   useEffect(() => {
-    if (itemRef.current) {
-      const width = itemRef.current.offsetWidth;
-      const style = getComputedStyle(itemRef.current);
+    const firstItem = document.querySelector('.product-slider-item');
+    if (firstItem) {
+      const width = firstItem.offsetWidth;
+      const style = getComputedStyle(firstItem);
       const marginRight = parseFloat(style.marginRight);
       const marginLeft = parseFloat(style.marginLeft);
       const paddingLeft = parseFloat(style.paddingLeft);
@@ -35,7 +35,8 @@ const ProductImageSlider = () => {
     try {
       setLoading(true);
       const items = await getProducts({ featured: true });
-      setProducts(items);
+      setProducts(items.rows || []);
+      console.log(items.rows);
     } catch (error) {
       console.error('Error fetching featured products:', error);
       message.error('Không thể tải sản phẩm nổi bật');
@@ -117,7 +118,6 @@ const ProductImageSlider = () => {
             <div
               key={product.id}
               className="product-slider-item"
-              ref={itemRef}
             >
               <div className="product-card">
                 <div 

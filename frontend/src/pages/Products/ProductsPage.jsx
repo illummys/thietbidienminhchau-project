@@ -111,7 +111,7 @@ const ProductsPage = () => {
       </div>
 
       {/* Nút lọc theo category */}
-      <div className="category-filters" style={{ margin: '16px 0' }}>
+      <div className="category-filters" style={{ margin: '16px 0 8px 0' }}>
         <Button
           type={!searchParams.get('category') ? 'primary' : 'default'}
           onClick={() => handleCategoryFilter(null)}
@@ -124,7 +124,7 @@ const ProductsPage = () => {
             key={cat.id}
             type={String(cat.id) === searchParams.get('category') ? 'primary' : 'default'}
             onClick={() => handleCategoryFilter(cat.id)}
-            style={{ marginRight: 8 }}
+            style={{ marginRight: 8 , marginTop: 8}}
           >
             {cat.name}
           </Button>
