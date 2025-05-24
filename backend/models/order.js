@@ -1,10 +1,10 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db');
 
-const Order = sequelize.define('Order', {
+module.exports = sequelize.define('Order', {
   id:               { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-  customer_name:    { type: DataTypes.STRING(100), allowNull: false },
-  customer_phone:   { type: DataTypes.STRING(20), allowNull: false },
+  customer_name:    { type: DataTypes.STRING, allowNull: false },
+  customer_phone:   { type: DataTypes.STRING, allowNull: false },
   customer_address: { type: DataTypes.TEXT, allowNull: false },
   note:             { type: DataTypes.TEXT },
   total_amount:     { type: DataTypes.DECIMAL(10,2), allowNull: false },
@@ -14,5 +14,3 @@ const Order = sequelize.define('Order', {
 }, {
   tableName: 'orders'
 });
-
-module.exports = Order;

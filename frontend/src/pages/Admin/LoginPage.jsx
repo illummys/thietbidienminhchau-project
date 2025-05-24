@@ -1,29 +1,29 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 import { Form, Input, Button, Card, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import './LoginPage.css';
 
 const LoginPage = () => {
   const [loading, setLoading] = useState(false);
+  const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const { login } = useAuth();
 
   const onFinish = async (values) => {
     setLoading(true);
     try {
-      const success = await login(values.email, values.password);
+      // backend đang dùng trường username
+      const success = await login(values.username, values.password);
       if (success) {
         message.success('Đăng nhập thành công!');
-        // Redirect to the page user tried to access or admin dashboard
         const from = location.state?.from?.pathname || '/admin/dashboard';
         navigate(from, { replace: true });
       } else {
-        message.error('Email hoặc mật khẩu không đúng!');
+        message.error('Tên đăng nhập hoặc mật khẩu không đúng!');
       }
-    } catch (error) {
+    } catch {
       message.error('Có lỗi xảy ra khi đăng nhập!');
     } finally {
       setLoading(false);
@@ -40,15 +40,12 @@ const LoginPage = () => {
           requiredMark={false}
         >
           <Form.Item
-            name="email"
-            rules={[
-              { required: true, message: 'Vui lòng nhập email!' },
-              { type: 'email', message: 'Email không hợp lệ!' }
-            ]}
+            name="username"
+            rules={[{ required: true, message: 'Vui lòng nhập tên đăng nhập!' }]}
           >
             <Input
               prefix={<UserOutlined />}
-              placeholder="Email"
+              placeholder="Tên đăng nhập"
               size="large"
             />
           </Form.Item>
@@ -81,4 +78,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage; 
+export default LoginPage;

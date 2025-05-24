@@ -1,95 +1,97 @@
-// src/api/api.js
 import axios from 'axios';
 
-const API_BASE = 'http://localhost:5000/api';
-
+// Single axios instance for both public & admin with JWT support
 const api = axios.create({
-  baseURL: API_BASE,
-  headers: {
-    'Content-Type': 'application/json'
-  }
+  baseURL: 'http://localhost:5000',
+  headers: { 'Content-Type': 'application/json' }
 });
 
-// Nếu bạn lưu token admin trong localStorage
+// Interceptor gắn JWT cho tất cả request
 api.interceptors.request.use(config => {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('ADMIN_TOKEN');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
 });
 
-// === AUTH (Admin) ===
-export const loginAdmin = async ({ username, password }) => {
-  const res = await api.post('/auth/login', { username, password });
-  // lưu token nếu dùng adminAuth middleware
-  localStorage.setItem('token', res.data.token);
-  return res.data;
-};
-
-// === CATEGORIES ===
+// === Public (Customer) Endpoints ===
 export const getCategories = () =>
-  api.get('/category').then(res => res.data);
+  api.get('/api/category').then(res => res.data);
 
 export const getCategory = id =>
-  api.get(`/category/${id}`).then(res => res.data);
+  api.get(`/api/category/${id}`).then(res => res.data);
 
-export const createCategory = payload =>
-  api.post('/category', payload).then(res => res.data);
-
-export const updateCategory = (id, payload) =>
-  api.put(`/category/${id}`, payload).then(res => res.data);
-
-export const deleteCategory = id =>
-  api.delete(`/category/${id}`).then(res => res.data);
-
-// === BRANDS ===
 export const getBrands = () =>
-  api.get('/brand').then(res => res.data);
+  api.get('/api/brand').then(res => res.data);
 
 export const getBrand = id =>
-  api.get(`/brand/${id}`).then(res => res.data);
+  api.get(`/api/brand/${id}`).then(res => res.data);
 
-export const createBrand = payload =>
-  api.post('/brand', payload).then(res => res.data);
-
-export const updateBrand = (id, payload) =>
-  api.put(`/brand/${id}`, payload).then(res => res.data);
-
-export const deleteBrand = id =>
-  api.delete(`/brand/${id}`).then(res => res.data);
-
-// === PRODUCTS ===
 export const getProducts = (params = {}) =>
-  api.get('/product', { params }).then(res => res.data);
+  api.get('/api/product', { params }).then(res => res.data);
 
 export const getProduct = id =>
-  api.get(`/product/${id}`).then(res => res.data);
+  api.get(`/api/product/${id}`).then(res => res.data);
 
-export const createProduct = payload =>
-  api.post('/product', payload).then(res => res.data);
-
-export const updateProduct = (id, payload) =>
-  api.put(`/product/${id}`, payload).then(res => res.data);
-
-export const deleteProduct = id =>
-  api.delete(`/product/${id}`).then(res => res.data);
-
-// === ORDERS ===
-// Khách (no auth)
 export const createOrder = payload =>
-  api.post('/order', payload).then(res => res.data);
+  api.post('/api/order', payload).then(res => res.data);
 
-// Admin
-export const getOrders = () =>
-  api.get('/order').then(res => res.data);
+// === Admin Endpoints ===
+// Categories
+export const getCategoriesAdmin = () =>
+  api.get('/admin/category').then(res => res.data);
 
-export const getOrder = id =>
-  api.get(`/order/${id}`).then(res => res.data);
+export const createCategoryAdmin = payload =>
+  api.post('/admin/category', payload).then(res => res.data);
 
-// === UTILS ===
-export const logout = () => {
-  localStorage.removeItem('token');
-};
+export const updateCategoryAdmin = (id, payload) =>
+  api.put(`/admin/category/${id}`, payload).then(res => res.data);
 
+export const deleteCategoryAdmin = id =>
+  api.delete(`/admin/category/${id}`).then(res => res.data);
+
+// Brands
+export const getBrandsAdmin = () =>
+  api.get('/admin/brand').then(res => res.data);
+
+export const createBrandAdmin = payload =>
+  api.post('/admin/brand', payload).then(res => res.data);
+
+export const updateBrandAdmin = (id, payload) =>
+  api.put(`/admin/brand/${id}`, payload).then(res => res.data);
+
+export const deleteBrandAdmin = id =>
+  api.delete(`/admin/brand/${id}`).then(res => res.data);
+
+// Products
+export const getProductsAdmin = (params = {}) =>
+  api.get('/admin/product', { params }).then(res => res.data);
+
+export const getProductAdmin = id =>
+  api.get(`/admin/product/${id}`).then(res => res.data);
+
+export const createProductAdmin = payload =>
+  api.post('/admin/product', payload).then(res => res.data);
+
+export const updateProductAdmin = (id, payload) =>
+  api.put(`/admin/product/${id}`, payload).then(res => res.data);
+
+export const deleteProductAdmin = id =>
+  api.delete(`/admin/product/${id}`).then(res => res.data);
+
+// Orders (Admin)
+export const getOrdersAdmin = () =>
+  api.get('/admin/order').then(res => res.data);
+
+export const getOrderAdmin = id =>
+  api.get(`/admin/order/${id}`).then(res => res.data);
+
+export const updateOrderAdmin = (id, payload) =>
+  api.put(`/admin/order/${id}`, payload).then(res => res.data);
+
+export const deleteOrderAdmin = id =>
+  api.delete(`/admin/order/${id}`).then(res => res.data);
+
+// Default export
 export default api;
